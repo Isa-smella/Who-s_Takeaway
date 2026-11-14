@@ -1,0 +1,10 @@
+<view class="page consent-page">
+  <view class="logo">湖's Takeaway</view>
+  <text class="title">欢迎使用</text>
+  <text class="description">使用存餐、取餐、扫码和蓝牙开锁前，请阅读并同意以下内容。</text>
+  <view class="card consent-card">
+    <view class="consent-row" bindtap="toggleLegalConsent"><view class="checkbox {{agreementChecked && privacyChecked ? 'checked' : ''}}">{{agreementChecked && privacyChecked ? '✓' : ''}}</view><text>我已阅读并同意</text><text class="link" catchtap="showAgreement">《用户协议》</text><text>和</text><text class="link" catchtap="showPrivacy">《隐私政策》</text></view>
+  </view>
+  <button class="primary continue-button" disabled="{{!agreementChecked || !privacyChecked}}" loading="{{submitting}}" bindtap="agreeAndContinue">同意并继续</button>
+  <text class="tip">未同意前不会连接柜体 BLE，也不能执行存取操作</text>
+</view>

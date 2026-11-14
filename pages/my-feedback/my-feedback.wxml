@@ -1,0 +1,22 @@
+<view class="page feedback-list-page">
+  <view wx:if="{{feedbackList.length === 0}}" class="empty">
+    <text class="empty-icon">无</text>
+    <text class="empty-title">暂无反馈记录</text>
+    <text class="muted">遇到问题时，可以提交反馈联系工作人员</text>
+  </view>
+
+  <view wx:else>
+    <view wx:for="{{feedbackList}}" wx:key="id" class="feedback-card card">
+      <view class="card-head">
+        <text class="problem-type">{{item.problemLabel}}</text>
+        <text class="submitted-label">已提交</text>
+      </view>
+      <view class="detail"><text>柜体编号</text><text>{{item.cabinetId}}</text></view>
+      <view class="detail"><text>柜格编号</text><text>{{item.lockerLabel}}</text></view>
+      <view class="detail"><text>提交时间</text><text>{{item.createdTime}}</text></view>
+      <view class="description"><text class="description-label">问题描述</text><text>{{item.descriptionText}}</text></view>
+    </view>
+  </view>
+
+  <button class="primary create-button" bindtap="createFeedback">提交新反馈</button>
+</view>

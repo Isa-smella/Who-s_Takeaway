@@ -1,0 +1,9 @@
+.pickup-page { position: relative; min-height: 100vh; overflow: hidden; text-align: center; }
+.campus-watermark { position: absolute; z-index: 0; top: -90rpx; left: 50%; width: 720rpx; height: 405rpx; opacity: .115; transform: translateX(-50%); pointer-events: none; }
+.locker-badge, .cabinet-context, .title, .description, .code-input, .inline-error, .main-button, .error-mark, .success-mark, .result { position: relative; z-index: 1; }
+.locker-badge { display: flex; align-items: center; justify-content: center; width: 118rpx; height: 118rpx; margin: 55rpx auto 35rpx; border-radius: 28rpx; background: #c03338; color: #fff; font-size: 50rpx; font-weight: 800; box-shadow: 0 12rpx 30rpx rgba(192,51,56,.2); }
+.cabinet-context { display: block; margin: -22rpx 0 30rpx; color: #806d6e; font-size: 24rpx; }
+.title { display: block; font-size: 40rpx; font-weight: 750; }.title.error,.inline-error { color: #c03338; }.description { display: block; margin: 18rpx 0 38rpx; color: #806d6e; font-size: 27rpx; }.failure-description { text-align: left; }
+.code-input { height: 105rpx; border: 2rpx solid #e9d9da; border-radius: 20rpx; background: #fff; color: #c03338; font-size: 44rpx; font-weight: 800; letter-spacing: 12rpx; text-align: center; }.inline-error { display: block; margin-top: 15rpx; font-size: 24rpx; }
+.main-button { margin-top: 22rpx; }.error-mark,.success-mark { display: flex; align-items: center; justify-content: center; width: 88rpx; height: 88rpx; margin: 18rpx auto; border-radius: 50%; color: #fff; font-size: 50rpx; font-weight: 800; }.error-mark { background: #c03338; }.success-mark { background: #297ddf; }
+.result { margin: 30rpx 0; padding: 12rpx 32rpx; text-align: left; }.result view { display: flex; justify-content: space-between; padding: 24rpx 0; border-bottom: 1rpx solid #f2e7e7; }.result view:last-child { border-bottom: 0; }.result text:first-child { color: #806d6e; }

@@ -1,0 +1,17 @@
+<view class="page auth-page">
+  <view class="login-brand">
+    <image class="login-brand-background" src="/assets/hnu-campus-card-bg-v2.png" mode="aspectFill" aria-hidden="true" />
+    <view class="logo">湖's Takeaway</view>
+  </view>
+  <text class="title">登录后继续</text>
+  <text class="description">登录用于确认身份、角色和业务权限。扫码获得的柜体信息会保留。</text>
+  <view class="card form-card">
+    <block wx:if="{{!useCloud}}">
+      <text class="label">开发阶段模拟身份</text>
+      <picker mode="selector" range="{{roleLabels}}" value="{{roleIndex}}" bindchange="chooseRole"><view class="role-picker">{{roleLabels[roleIndex]}} ▾</view></picker>
+    </block>
+    <text wx:else class="label">身份和角色将由微信云端确认</text>
+    <button class="primary login-button" loading="{{loggingIn}}" bindtap="login">{{useCloud ? '微信登录' : '微信登录（Mock）'}}</button>
+  </view>
+  <text class="tip">正式版本角色由云端返回，客户端不能自行提升权限</text>
+</view>

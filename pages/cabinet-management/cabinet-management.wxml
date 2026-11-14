@@ -1,0 +1,19 @@
+<view class="page cabinet-list-page">
+  <view class="list-head"><view><text class="title">柜体管理</text><text class="subtitle">共 {{totalCount}} 台实体柜体</text></view><button class="add-button" bindtap="addCabinet">新增柜体</button></view>
+  <view class="overview-grid">
+    <view><text>{{activeCount}}</text><text>正常</text></view><view><text>{{maintenanceCount}}</text><text>整柜维修</text></view><view><text>{{attentionCount}}</text><text>需处理</text></view>
+  </view>
+  <view class="status-explanation">正常：可提供存取服务　维修：人工设置或设备异常，统一通过维修工单处理</view>
+  <view class="filters"><view class="filter {{filter === 'ALL' ? 'active' : ''}}" data-filter="ALL" bindtap="setFilter">全部</view><view class="filter {{filter === 'ACTIVE' ? 'active' : ''}}" data-filter="ACTIVE" bindtap="setFilter">正常</view><view class="filter {{filter === 'MAINTENANCE' ? 'active' : ''}}" data-filter="MAINTENANCE" bindtap="setFilter">维修中</view></view>
+  <view wx:if="{{authorized && cabinets.length === 0}}" class="empty">暂无柜体，请点击“新增柜体”创建</view>
+  <view wx:if="{{authorized && cabinets.length > 0 && visibleCabinets.length === 0}}" class="filter-empty">当前筛选下暂无柜体</view>
+  <view wx:for="{{visibleCabinets}}" wx:key="id" class="cabinet-card card {{item.needsAttention ? 'needs-attention' : ''}}">
+    <view class="card-head"><view><text class="cabinet-id">{{item.id}}</text><text class="cabinet-name">{{item.name}}</text></view><text class="status {{item.status}}">{{item.statusLabel}}</text></view>
+    <view class="detail"><text>位置</text><text>{{item.locationName || '未填写'}}</text></view>
+    <view class="detail"><text>柜格</text><text>{{item.lockerCount}} 格</text></view>
+    <view class="detail"><text>单格状态</text><text>维修中 {{item.maintenanceLockerCount}}</text></view>
+    <view class="device-status-line {{item.bleConnected ? 'connected' : 'disconnected'}}"><text>设备{{item.bleStatusText}}</text><text>{{item.bleLastSeenLabel}}</text></view>
+    <view wx:if="{{item.alertText}}" class="alert-line">{{item.alertText}}</view>
+    <view class="actions"><button data-id="{{item.id}}" bindtap="viewCabinet">查看</button><button data-id="{{item.id}}" bindtap="editCabinet">编辑</button></view>
+  </view>
+</view>

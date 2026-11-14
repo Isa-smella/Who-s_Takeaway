@@ -1,0 +1,74 @@
+<view wx:if="{{authorized}}" class="page home">
+  <view class="brand-area">
+    <image class="brand-background" src="/assets/hnu-campus-card-bg-v2.png" mode="widthFix" aria-hidden="true" />
+    <view class="brand">湖's Takeaway</view>
+    <view class="subtitle">校园智能外卖暂存柜</view>
+  </view>
+  <view class="card cabinet-card">
+    <view class="cabinet-card-content">
+      <text class="label">当前柜体</text><text class="cabinet-id">{{hasCabinet ? cabinetId : '尚未识别柜体'}}</text>
+      <view wx:if="{{hasCabinet}}" class="connection {{bluetoothStatus}}"><view class="dot"></view><text>{{bluetoothText}}</text></view>
+      <view wx:else class="no-cabinet">请扫描柜体上的小程序码进入</view>
+      <view wx:if="{{hasCabinet && (bluetoothStatus === 'DISCONNECTED' || bluetoothStatus === 'ERROR')}}" class="failure">
+        <text>请靠近柜体并确认手机蓝牙已开启</text>
+        <button class="primary compact" bindtap="reconnect">重新连接</button>
+        <button class="secondary compact" bindtap="contactService">联系客服</button>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{unlockAuthorizationCount > 0}}" class="authorization-banner" bindtap="goUnlockAuthorizations">
+    <view><text>客服已授权重新开锁</text><text>共 {{unlockAuthorizationCount}} 条短时有效授权</text></view><text>立即处理 ›</text>
+  </view>
+  <view wx:if="{{canStore || canPickup}}" class="actions {{canStore && canPickup ? '' : 'single-action'}}">
+    <button wx:if="{{canStore}}" class="action primary" disabled="{{!hasCabinet || bluetoothStatus !== 'CONNECTED'}}" bindtap="goStore"><text class="action-char">存</text><text>用户存餐</text></button>
+    <button wx:if="{{canPickup}}" class="action secondary" disabled="{{!hasCabinet || bluetoothStatus !== 'CONNECTED'}}" bindtap="goPickup"><text class="action-char">取</text><text>用户取餐</text></button>
+  </view>
+  <view wx:else class="staff-role-tip">当前身份：{{roleText}}。业务处理请从个人中心进入对应工作台。</view>
+  <view class="utility-actions {{canDebug ? '' : 'customer-only'}}">
+    <view wx:if="{{canDebug}}" class="small-tool-button debug-entry" bindtap="goDebug">开发调试工具</view>
+    <view class="small-tool-button service-entry" bindtap="contactService">
+      <image class="service-mascot" src="/assets/hnu-service-mascot-v1.png" mode="widthFix" aria-hidden="true" />
+      <text>客服</text>
+    </view>
+  </view>
+  <view wx:if="{{announcementItems.length > 0}}" class="notice-board card">
+    <view class="notice-board-header">
+      <view><text class="notice-board-mark"></text><text class="notice-board-title">公告栏</text></view>
+      <text class="notice-board-count">{{announcementItems.length}} 条</text>
+    </view>
+    <swiper class="notice-swiper" indicator-dots="{{announcementItems.length > 1}}" autoplay="{{announcementItems.length > 1}}" circular="{{announcementItems.length > 1}}" interval="5000" duration="350">
+      <swiper-item wx:for="{{announcementItems}}" wx:key="id">
+        <view class="notice-item" data-index="{{index}}" bindtap="openAnnouncement">
+          <view wx:if="{{item.imageUrl}}" class="notice-media" data-index="{{index}}" catchtap="previewAnnouncementImages">
+            <image class="notice-image" src="{{item.imageUrl}}" mode="aspectFill" />
+            <text wx:if="{{item.imageCount > 1}}" class="notice-image-count">共 {{item.imageCount}} 张</text>
+          </view>
+          <view class="notice-copy">
+            <text class="notice-type {{item.type}}">{{item.label}}</text>
+            <text class="notice-title">{{item.title}}</text>
+            <text class="notice-summary">{{item.summary}}</text>
+            <text class="notice-more">查看详情 ›</text>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+  <view class="bottom-nav">
+    <view class="nav-item active" bindtap="goHome">
+      <text class="nav-icon">⌂</text><text>首页</text>
+    </view>
+    <view class="scan-nav-item" bindtap="scanCabinet">
+      <view class="scan-button">
+        <view class="scan-glyph">
+          <view class="scan-corner top-left"></view><view class="scan-corner top-right"></view>
+          <view class="scan-corner bottom-left"></view><view class="scan-corner bottom-right"></view>
+          <view class="scan-line"></view>
+        </view>
+      </view>
+      <text class="scan-label">扫一扫</text>
+    </view>
+    <view class="nav-item" bindtap="goProfile">
+      <text class="nav-icon">人</text><text>个人中心</text>
+    </view>
+  </view>
+</view>

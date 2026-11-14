@@ -1,0 +1,47 @@
+<view wx:if="{{authorized}}" class="page logs-page">
+  <view wx:if="{{canSelectCabinets}}" class="filters">
+    <view class="filter {{scope === 'CABINET' ? 'active' : ''}}" data-scope="CABINET" bindtap="setScope">当前柜体</view>
+    <view class="filter {{scope === 'ALL' ? 'active' : ''}}" data-scope="ALL" bindtap="setScope">全部柜体</view>
+  </view>
+  <view class="query-card card">
+    <text class="query-label">柜体编号</text>
+    <input wx:if="{{scope === 'CABINET' || !canSelectCabinets}}" class="query-field" disabled="{{true}}" value="{{scope === 'CABINET' ? currentCabinetId : ''}}" placeholder="{{scope === 'CABINET' ? '未选择当前柜体' : '全部柜体'}}" />
+    <picker wx:else mode="selector" range="{{cabinetOptions}}" range-key="label" value="{{cabinetIndex}}" disabled="{{cabinetOptionsLoading}}" bindtap="loadCabinetOptions" bindchange="chooseCabinet"><view class="query-field picker-field"><text class="picker-label">{{cabinetOptionsLoading ? '柜体列表加载中…' : cabinetOptions[cabinetIndex].label}}</text><text class="picker-arrow">›</text></view></picker>
+    <text class="query-label">用户ID</text><input class="query-field" value="{{userId}}" placeholder="选填" bindinput="inputUser" />
+    <text class="query-label">注册编号</text><input class="query-field" type="number" value="{{registrationNumber}}" placeholder="如 00001，选填" bindinput="inputRegistrationNumber" />
+    <text class="query-label">柜格编号</text><input class="query-field" type="number" value="{{lockerId}}" placeholder="选填" bindinput="inputLocker" />
+    <view class="query-grid">
+      <view><text class="query-label">操作类型</text><view class="query-field picker-field" bindtap="openActionSelector"><text class="picker-label">{{actionOptions[actionIndex].label}}</text><text class="picker-arrow">›</text></view></view>
+      <view><text class="query-label">操作结果</text><picker mode="selector" range="{{resultOptions}}" range-key="label" value="{{resultIndex}}" bindchange="chooseResult"><view class="query-field picker-field"><text class="picker-label">{{resultOptions[resultIndex].label}}</text><text class="picker-arrow">›</text></view></picker></view>
+    </view>
+    <view class="query-grid">
+      <view><text class="query-label">开始日期</text><picker mode="date" value="{{startDate}}" bindchange="chooseStartDate"><view class="query-field">{{startDate || '不限'}}</view></picker></view>
+      <view><text class="query-label">结束日期</text><picker mode="date" value="{{endDate}}" bindchange="chooseEndDate"><view class="query-field">{{endDate || '不限'}}</view></picker></view>
+    </view>
+    <view class="query-actions"><button bindtap="resetFilters">重置</button><button class="search-button" bindtap="search">查询</button></view>
+  </view>
+
+  <view wx:if="{{showActionSelector}}" class="action-selector-mask" catchtap="closeActionSelector">
+    <view class="action-selector-sheet" catchtap="blockSelectorEvent">
+      <view class="action-selector-head"><text>选择操作类型</text><text class="selector-close" bindtap="closeActionSelector">关闭</text></view>
+      <input class="action-search" value="{{actionKeyword}}" placeholder="搜索中文操作名称" confirm-type="search" bindinput="inputActionKeyword" />
+      <scroll-view scroll-y class="action-option-list">
+        <view wx:for="{{filteredActionOptions}}" wx:key="value" class="action-option {{actionOptions[actionIndex].value === item.value ? 'selected' : ''}}" data-value="{{item.value}}" bindtap="selectAction">
+          <text>{{item.label}}</text><text wx:if="{{actionOptions[actionIndex].value === item.value}}" class="selected-mark">✓</text>
+        </view>
+        <view wx:if="{{filteredActionOptions.length === 0}}" class="no-action-option">没有匹配的操作类型</view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <view wx:if="{{authorized && logs.length === 0}}" class="empty">暂无操作记录</view>
+  <view wx:else>
+    <view wx:for="{{logs}}" wx:key="id" class="log-card card">
+      <view class="log-head"><text>{{item.actionLabel}}</text><text class="result {{item.result}}">{{item.resultLabel}}</text></view>
+      <view class="detail"><text>柜体 / 柜格</text><text>{{item.cabinetId || '—'}} / {{item.lockerLabel}}</text></view>
+      <view class="detail"><text>操作账号</text><text>{{item.operatorLabel}}</text></view>
+      <view class="detail"><text>用户注册编号</text><text>{{item.registrationLabel}}</text></view>
+      <view class="detail"><text>时间</text><text>{{item.createdTime}}</text></view>
+    </view>
+  </view>
+</view>

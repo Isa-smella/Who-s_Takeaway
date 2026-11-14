@@ -1,0 +1,16 @@
+<view class="page form-page">
+  <view class="page-head"><text>{{editing ? '编辑柜体' : '新增柜体'}}</text><text>{{editing ? '柜体编号投入使用后不可修改' : '创建后即可获得唯一二维码参数'}}</text></view>
+  <view class="card form-card">
+    <text class="label">柜体编号 *</text>
+    <input class="field {{editing ? 'disabled' : ''}}" disabled="{{editing}}" value="{{cabinetId}}" placeholder="例如 HNU-03" bindinput="inputCabinetId" />
+    <text wx:if="{{editing}}" class="hint">如需更换编号，请新增柜体，并将旧柜体设置为整柜维修。</text>
+
+    <text class="label">柜体名称 *</text><input class="field" value="{{name}}" placeholder="例如 德智园1号柜" bindinput="inputName" />
+    <text class="label">位置名称 *</text><input class="field" value="{{locationName}}" placeholder="例如 德智园北门" bindinput="inputLocation" />
+    <text class="label">柜格数量 *</text><input class="field {{editing ? 'disabled' : ''}}" disabled="{{editing}}" type="number" value="{{lockerCount}}" placeholder="例如 8" bindinput="inputLockerCount" />
+    <text wx:if="{{editing}}" class="hint">柜格属于实体结构，柜体创建后不可修改数量。</text>
+    <text class="label">BLE控制器标识 *</text><input class="field" value="{{bleIdentifier}}" placeholder="例如 HUS-HNU-03" bindinput="inputBleIdentifier" />
+    <text class="label">设备备注</text><textarea class="notes" maxlength="300" value="{{notes}}" placeholder="选填" bindinput="inputNotes"></textarea>
+  </view>
+  <button class="primary submit" disabled="{{!authorized || submitting}}" loading="{{submitting}}" bindtap="submit">{{editing ? '保存修改' : '创建柜体'}}</button>
+</view>

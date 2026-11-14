@@ -1,0 +1,11 @@
+<view wx:if="{{authorized}}" class="page management-page">
+  <view class="page-head"><text class="page-title">管理中心</text><text class="page-subtitle">系统管理与运营工具</text></view>
+
+  <view class="cabinet-management-entry card" bindtap="goCabinetManagement"><view><text>柜体管理</text><text>新增、编辑或维修实体柜体</text></view><text class="arrow">›</text></view>
+  <view class="cabinet-management-entry card" bindtap="goFeedbackManagement"><view><text>反馈处理</text><text>按用户、柜体和柜格查看问题</text></view><text class="arrow">›</text></view>
+  <view class="cabinet-management-entry card" bindtap="goMaintenanceOrders"><view><text>维修工单</text><text>到场、机械开锁、检修、自检与恢复</text></view><text class="arrow">›</text></view>
+  <view class="cabinet-management-entry card" bindtap="goAnnouncementManagement"><view><text>公告管理</text><text>新增、编辑、发布或停用首页公告与广告</text></view><text class="arrow">›</text></view>
+  <view class="cabinet-management-entry card" bindtap="goAnalytics"><view><text>运营分析</text><text>查看存取餐、设备健康与维修趋势</text></view><text class="arrow">›</text></view>
+
+</view>
+<view wx:if="{{!authorized}}" class="page management-loading">正在验证权限…</view>

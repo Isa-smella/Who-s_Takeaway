@@ -1,0 +1,42 @@
+<view class="page form-page">
+  <view class="page-head"><text>{{editing ? '编辑公告' : '新增公告'}}</text><text>保存为“已发布”后，处于有效期内的内容会显示在首页</text></view>
+  <view class="card form-card">
+    <text class="label">内容类型 *</text>
+    <picker mode="selector" range="{{typeLabels}}" value="{{typeIndex}}" bindchange="chooseType"><view class="picker-field"><text>{{typeLabels[typeIndex]}}</text><text>›</text></view></picker>
+
+    <text class="label">标签文字</text><input class="field" value="{{label}}" maxlength="12" placeholder="例如 公告" bindinput="inputLabel" />
+    <text class="label">标题 *</text><input class="field" value="{{title}}" maxlength="60" placeholder="请输入公告标题" bindinput="inputTitle" />
+    <text class="label">首页摘要 *</text><textarea class="summary" value="{{summary}}" maxlength="120" placeholder="首页公告栏显示的简短内容" bindinput="inputSummary"></textarea>
+    <text class="label">详细内容</text><textarea class="content" value="{{content}}" maxlength="2000" placeholder="用户点击“查看详情”后显示；留空则使用首页摘要" bindinput="inputContent"></textarea>
+
+    <text class="label">公告照片</text>
+    <view wx:if="{{imageUrls.length}}" class="image-grid">
+      <view wx:for="{{imageUrls}}" wx:key="*this" class="image-tile">
+        <image class="image-preview" src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewAnnouncementImage" />
+        <text wx:if="{{index === 0}}" class="cover-label">首页首图</text>
+        <button class="remove-image" data-index="{{index}}" disabled="{{imageUploading}}" catchtap="removeAnnouncementImage">×</button>
+      </view>
+    </view>
+    <button wx:if="{{imageUrls.length < 9}}" class="add-image-button" loading="{{imageUploading}}" disabled="{{imageUploading}}" bindtap="chooseAnnouncementImage">＋ 添加照片（{{imageUrls.length}}/9）</button>
+    <text class="hint">可一次选择多张，也可以继续添加。照片会自动压缩并上传至微信云存储；单张不超过 10MB，第一张作为首页首图。</text>
+    <text class="label">小程序页面地址</text><input class="field" value="{{targetUrl}}" maxlength="500" placeholder="选填，例如 /pages/my-feedback/my-feedback" bindinput="inputTargetUrl" />
+    <text class="hint">填写后点击公告会跳转到该页面；留空则弹窗显示详情。</text>
+
+    <text class="label">优先级</text><input class="field" type="number" value="{{priority}}" maxlength="3" placeholder="0-999，数值越大越靠前" bindinput="inputPriority" />
+    <text class="label">发布状态 *</text>
+    <picker mode="selector" range="{{statusLabels}}" value="{{statusIndex}}" bindchange="chooseStatus"><view class="picker-field"><text>{{statusLabels[statusIndex]}}</text><text>›</text></view></picker>
+
+    <view class="switch-row"><view><text>立即生效</text><text>关闭后可以指定开始时间</text></view><switch checked="{{immediateStart}}" color="#c03338" bindchange="toggleImmediateStart" /></view>
+    <view wx:if="{{!immediateStart}}" class="date-grid">
+      <picker mode="date" value="{{startDate}}" bindchange="chooseStartDate"><view class="picker-field">{{startDate}}</view></picker>
+      <picker mode="time" value="{{startTime}}" bindchange="chooseStartTime"><view class="picker-field">{{startTime}}</view></picker>
+    </view>
+
+    <view class="switch-row"><view><text>长期有效</text><text>关闭后可以指定结束时间</text></view><switch checked="{{neverExpire}}" color="#c03338" bindchange="toggleNeverExpire" /></view>
+    <view wx:if="{{!neverExpire}}" class="date-grid">
+      <picker mode="date" value="{{endDate}}" bindchange="chooseEndDate"><view class="picker-field">{{endDate}}</view></picker>
+      <picker mode="time" value="{{endTime}}" bindchange="chooseEndTime"><view class="picker-field">{{endTime}}</view></picker>
+    </view>
+  </view>
+  <button class="primary submit" disabled="{{!authorized || submitting || imageUploading}}" loading="{{submitting}}" bindtap="submit">保存公告</button>
+</view>

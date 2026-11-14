@@ -1,0 +1,21 @@
+<view class="page pickup-records-page">
+  <view wx:if="{{records.length === 0}}" class="empty">
+    <text class="empty-icon">取</text>
+    <text class="empty-title">暂无成功取餐记录</text>
+    <text class="muted">只有柜门成功打开并完成取餐后才会记录</text>
+  </view>
+
+  <view wx:else>
+    <view wx:for="{{records}}" wx:key="id" class="pickup-record card">
+      <view class="record-head">
+        <view><text class="cabinet-name">{{item.cabinetId}}</text><text class="locker-number">{{item.lockerNumber}}号柜</text></view>
+        <text class="success-status">取餐成功</text>
+      </view>
+      <view class="detail"><text>存入时间</text><text>{{item.storedTime}}</text></view>
+      <view class="detail"><text>取餐时间</text><text>{{item.pickedTime}}</text></view>
+      <view class="detail"><text>取餐方式</text><text>{{item.pickupMethodText}}</text></view>
+      <view class="detail"><text>取餐柜格</text><text>{{item.cabinetId}} · {{item.lockerNumber}}号柜</text></view>
+      <view class="detail"><text>取餐码</text><text class="pickup-code">{{item.pickupCode}}</text></view>
+    </view>
+  </view>
+</view>

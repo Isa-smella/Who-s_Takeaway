@@ -1,0 +1,21 @@
+<view class="page feedback-page">
+  <view class="header"><text class="title">问题反馈</text><text class="subtitle">用于记录非紧急问题；柜门打不开请直接联系在线客服</text></view>
+  <view class="card form-card">
+    <text class="field-label">问题类型 *</text>
+    <picker mode="selector" range="{{problemLabels}}" value="{{problemIndex}}" bindchange="chooseProblem">
+      <view class="field picker-field {{problemIndex < 0 ? 'placeholder' : ''}}">{{problemIndex < 0 ? '请选择问题类型' : problemLabels[problemIndex]}}<text>›</text></view>
+    </picker>
+
+    <text class="field-label">柜体编号 *</text>
+    <input class="field" value="{{cabinetId}}" placeholder="由扫码自动带入，可修改" bindinput="inputCabinet" />
+
+    <text class="field-label">柜格编号</text>
+    <input class="field" type="number" value="{{lockerId}}" placeholder="自动带入，可修改" bindinput="inputLocker" />
+
+    <text class="field-label">问题描述</text>
+    <textarea class="description-field" maxlength="500" value="{{description}}" placeholder="请描述发生时间、现象和已经尝试过的操作" bindinput="inputDescription"></textarea>
+    <text class="counter">{{description.length}} / 500</text>
+  </view>
+  <button class="primary submit-button" disabled="{{!authorized || submitting}}" loading="{{submitting}}" bindtap="submitFeedback">提交反馈</button>
+  <text class="privacy-tip">请勿填写与问题无关的敏感个人信息</text>
+</view>

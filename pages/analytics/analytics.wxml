@@ -1,0 +1,34 @@
+<view class="page analytics-page" wx:if="{{authorized}}">
+  <view class="page-head"><text class="page-title">运营分析</text><text class="page-subtitle">基于真实业务与设备事件统计</text></view>
+  <view class="range-row"><button wx:for="{{ranges}}" wx:key="key" class="range-button {{(customPanelVisible && item.key === 'CUSTOM') || (!customPanelVisible && item.key === range) ? 'selected' : ''}}" disabled="{{loading}}" data-range="{{item.key}}" bindtap="chooseRange">{{item.label}}</button></view>
+  <view wx:if="{{customPanelVisible}}" class="custom-range-panel">
+    <block wx:if="{{beijingTodayDate}}">
+      <view class="custom-date-row">
+        <picker class="custom-date-picker" mode="date" value="{{customStartDate}}" end="{{beijingTodayDate}}" disabled="{{loading}}" bindchange="chooseCustomStartDate"><view class="custom-date-field"><text class="custom-date-label">开始日期</text><text>{{customStartDate}} ▾</text></view></picker>
+        <picker class="custom-date-picker" mode="date" value="{{customEndDate}}" end="{{beijingTodayDate}}" disabled="{{loading}}" bindchange="chooseCustomEndDate"><view class="custom-date-field"><text class="custom-date-label">结束日期</text><text>{{customEndDate}} ▾</text></view></picker>
+      </view>
+      <text wx:if="{{customErrorMessage}}" class="custom-date-error">{{customErrorMessage}}</text>
+      <button class="custom-confirm" disabled="{{loading}}" bindtap="confirmCustomRange">确定</button>
+    </block>
+    <text wx:else class="custom-date-label">日期信息暂不可用，请刷新重试</text>
+  </view>
+  <view wx:if="{{range === 'CUSTOM'}}" class="custom-range-summary">{{customRangeText}}</view>
+  <view wx:if="{{loading}}" class="loading-tip">正在加载 {{rangeText}} 数据…</view>
+  <view wx:elif="{{errorMessage}}" class="error-card"><text>{{errorMessage}}</text><button bindtap="retry">重新加载</button></view>
+  <block wx:else>
+    <view class="metric-grid" wx:if="{{metrics.length}}">
+      <view wx:for="{{metrics}}" wx:key="key" class="metric-card {{item.key === selectedMetric ? 'selected' : ''}}" data-metric="{{item.key}}" bindtap="selectMetric">
+        <text class="metric-label">{{item.label}}</text><text class="metric-value">{{item.displayValue}}</text>
+      </view>
+    </view>
+    <view class="chart-card">
+      <view class="section-title-row"><text>{{selectedMetricConfig.chartTitle}} · {{rangeText}}</text></view>
+      <view wx:if="{{chartHasData}}" class="chart-stage">
+        <canvas canvas-id="analyticsTrend" width="{{trendCanvasWidth}}" height="{{trendCanvasHeight}}" class="chart-canvas" bindtouchstart="onChartTouch" catchtouchmove="onChartTouchMove"></canvas>
+        <view wx:if="{{selectedPoint}}" class="chart-tooltip {{selectedPoint.placement}}" style="{{selectedPoint.style}}"><text>{{selectedPoint.label}}</text><text>{{selectedMetricConfig.label}}：{{selectedPoint.displayValue}}</text><text wx:if="{{selectedPoint.hasAverageCount}}">成功连接：{{selectedPoint.success}} 次</text><text wx:elif="{{selectedPoint.hasCounts}}">成功：{{selectedPoint.success}} 次　尝试：{{selectedPoint.attempts}} 次</text><view class="tooltip-arrow" style="{{selectedPoint.arrowStyle}}"></view></view>
+      </view>
+      <view wx:else class="empty-chart">暂无数据</view>
+    </view>
+  </block>
+</view>
+<view wx:if="{{!authorized}}" class="page empty-tip">正在验证权限…</view>

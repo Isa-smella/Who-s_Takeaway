@@ -1,0 +1,15 @@
+.store-page { position: relative; min-height: 100vh; overflow: hidden; text-align: center; }
+.campus-watermark { position: absolute; z-index: 0; top: -90rpx; left: 50%; width: 720rpx; height: 405rpx; opacity: .115; transform: translateX(-50%); pointer-events: none; }
+.locker-badge, .cabinet-context, .title, .description, .status-card, .main-button, .mock-button, .success-mark, .result { position: relative; z-index: 1; }
+.locker-badge { display: flex; align-items: center; justify-content: center; width: 118rpx; height: 118rpx; margin: 55rpx auto 35rpx; border-radius: 28rpx; background: #c03338; color: #fff; font-size: 50rpx; font-weight: 800; box-shadow: 0 12rpx 30rpx rgba(192,51,56,.2); }
+.cabinet-context { display: block; margin: -22rpx 0 30rpx; color: #806d6e; font-size: 24rpx; }
+.title { display: block; font-size: 40rpx; font-weight: 750; }.title.error { color: #c03338; }
+.description { display: block; margin: 18rpx 0 42rpx; color: #806d6e; font-size: 27rpx; }
+.failure-description { text-align: left; }
+.status-card { margin: 0 auto 36rpx; padding: 28rpx; border-radius: 20rpx; font-size: 28rpx; font-weight: 700; }
+.status-card.open { background: #fff0f0; color: #a52e33; }.status-card.closed { background: #eef5ff; color: #297ddf; }
+.pickup-code-input { box-sizing: border-box; width: 100%; height: 88rpx; margin-top: 24rpx; padding: 0 24rpx; border: 2rpx solid #eadcdd; border-radius: 16rpx; background: #fff; text-align: center; font-size: 34rpx; letter-spacing: 8rpx; }
+.main-button { margin-top: 22rpx; }.mock-button { margin-top: 28rpx; background: #fff; border: 2rpx dashed #e2b9bb; color: #8f2529; font-size: 25rpx; }
+.success-mark { display: flex; align-items: center; justify-content: center; width: 88rpx; height: 88rpx; margin: 18rpx auto; border-radius: 50%; background: #297ddf; color: #fff; font-size: 50rpx; }
+.result { margin: 35rpx 0; padding: 12rpx 32rpx; text-align: left; }.result view { display: flex; justify-content: space-between; align-items: center; padding: 25rpx 0; border-bottom: 1rpx solid #f2e7e7; }.result view:last-child { border-bottom: 0; }
+.result-label { color: #806d6e; }.code { color: #c03338; font-size: 42rpx; font-weight: 800; letter-spacing: 5rpx; }

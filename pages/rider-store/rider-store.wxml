@@ -1,0 +1,63 @@
+<view class="page store-page">
+  <image class="campus-watermark" src="/assets/hnu-store-auditorium-v1.png" mode="aspectFit" />
+  <view class="locker-badge">{{lockerNumber}}</view>
+  <text class="cabinet-context">柜体 {{cabinetId}}</text>
+
+  <block wx:if="{{phase === 'OPENING' || phase === 'CONNECTING'}}">
+    <text class="title">{{phase === 'CONNECTING' ? '正在连接柜体...' : '正在请求开锁...'}}</text>
+    <text class="description">请靠近柜体并稍候</text>
+  </block>
+
+  <block wx:elif="{{phase === 'CONNECTION_ERROR' || phase === 'OPEN_ERROR'}}">
+    <text class="title error">{{errorMessage}}</text>
+    <text class="description failure-description">{{unlockFailureHint || (errorMessage === '云端存餐授权函数尚未更新' ? '请重新上传部署 createStoreUnlockAuthorization 后再试' : '请靠近柜体并确认手机蓝牙已开启')}}</text>
+    <button class="primary main-button" bindtap="reconnect">重新连接</button>
+    <button class="secondary main-button" bindtap="contactService">联系客服</button>
+  </block>
+
+  <block wx:elif="{{phase === 'LOCKER_NOT_READY'}}">
+    <text class="title error">{{errorMessage}}</text>
+    <text class="description">{{canRetryLocker ? '请先关闭柜门后重新尝试' : '请返回并选择其他空闲柜格'}}</text>
+    <view wx:if="{{doorStatus === 'OPEN'}}" class="status-card open">柜门 OPEN</view>
+    <button wx:if="{{isDevelopment && isMockTransport && doorStatus === 'OPEN'}}" class="mock-button" bindtap="mockCloseDoor">模拟柜门状态：关闭柜门</button>
+    <button wx:if="{{canRetryLocker}}" class="primary main-button" bindtap="retryOpen">已关闭，重新尝试</button>
+    <button wx:else class="secondary main-button" bindtap="finish">返回选择其他柜格</button>
+  </block>
+
+  <block wx:elif="{{phase === 'LOCKER_MAINTENANCE'}}">
+    <text class="title error">{{errorMessage}}</text>
+    <text class="description">{{unlockFailureHint || (redepositMode ? '系统已停止继续电子开锁，请返回存入记录；管理员处理维修工单并完成自检后方可恢复' : '系统已停止继续电子开锁，请选择其他空闲柜格；管理员处理维修工单并完成自检后方可恢复')}}</text>
+    <button class="secondary main-button" bindtap="finish">{{redepositMode ? '返回存入记录' : '返回选择其他柜格'}}</button>
+  </block>
+
+  <block wx:elif="{{phase === 'WAITING_CLOSE'}}">
+    <text class="title">{{lockerNumber}}号柜已打开</text>
+    <text class="description">{{redepositMode ? '请重新放好外卖并关闭柜门' : '请放入外卖并关闭柜门'}}</text>
+    <view class="status-card open">柜门 OPEN</view>
+    <button wx:if="{{isDevelopment && isMockTransport}}" class="mock-button" bindtap="mockCloseDoor">模拟柜门状态：关闭柜门</button>
+  </block>
+
+  <block wx:elif="{{phase === 'WAITING_CONFIRM'}}">
+    <text class="title">{{lockerNumber}}号柜门已关闭</text>
+    <text class="description">{{redepositMode ? '请重新输入手机号后4位并确认存入' : '请确认外卖已经放入'}}</text>
+    <view class="status-card closed">柜门 CLOSED</view>
+    <input class="pickup-code-input" type="number" maxlength="4" value="{{pickupCode}}" placeholder="请输入用户手机号后4位" bindinput="inputPickupCode" />
+    <text class="description">该4位数字将作为用户取餐码</text>
+    <button class="primary main-button" disabled="{{pickupCode.length !== 4}}" loading="{{confirming}}" bindtap="confirmDeposit">{{redepositMode ? '确认再次存入' : '确认存入'}}</button>
+    <button wx:if="{{isDevelopment && isMockTransport}}" class="mock-button" loading="{{reportingFailure}}" bindtap="simulateDepositFailure">模拟本次确认存入失败</button>
+    <button class="secondary main-button" bindtap="reopen">重新开门</button>
+  </block>
+
+  <block wx:elif="{{phase === 'SUCCESS'}}">
+    <text class="success-mark">✓</text>
+    <text class="title">{{redepositMode ? '再次存入成功' : '存入成功'}}</text>
+    <view class="card result">
+      <view><text class="result-label">柜体</text><text>{{cabinetId}}</text></view>
+      <view><text class="result-label">柜格</text><text>{{lockerNumber}}号柜</text></view>
+      <view><text class="result-label">存入时间</text><text>{{storedTime}}</text></view>
+      <view><text class="result-label">取餐码</text><text class="code">{{record.pickupCode}}</text></view>
+    </view>
+    <button class="primary main-button" bindtap="copyPickupInfo">复制取餐信息</button>
+    <button class="secondary main-button" bindtap="finish">完成</button>
+  </block>
+</view>

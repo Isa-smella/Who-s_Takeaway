@@ -1,0 +1,25 @@
+<view class="page announcement-page">
+  <view class="page-head">
+    <view><text class="page-title">公告管理</text><text class="page-subtitle">首页只展示已发布且处于有效期内的内容</text></view>
+    <button class="primary add-button" bindtap="addAnnouncement">新增公告</button>
+  </view>
+
+  <view wx:if="{{loading}}" class="empty-tip">正在加载公告...</view>
+  <view wx:elif="{{!items.length}}" class="empty-card card"><text>暂无公告</text><text>点击“新增公告”发布第一条内容</text></view>
+  <view wx:else class="announcement-list">
+    <view wx:for="{{items}}" wx:key="id" class="announcement-card card">
+      <view class="item-head">
+        <view><text class="type-badge {{item.type}}">{{item.typeText}}</text><text class="status-badge {{item.status}}">{{item.statusText}}</text></view>
+        <text class="priority">优先级 {{item.priority}}</text>
+      </view>
+      <text class="item-title">{{item.title}}</text>
+      <text class="item-summary">{{item.summary}}</text>
+      <view class="time-row"><text>生效：{{item.startText}}</text><text>结束：{{item.endText}}</text></view>
+      <view class="item-actions">
+        <button class="action-button" data-id="{{item.id}}" bindtap="editAnnouncement">编辑</button>
+        <button class="action-button status-action" data-id="{{item.id}}" data-status="{{item.status}}" bindtap="toggleStatus">{{item.status === 'PUBLISHED' ? '停用' : '发布'}}</button>
+        <button class="action-button delete-action" data-id="{{item.id}}" bindtap="deleteAnnouncement">删除</button>
+      </view>
+    </view>
+  </view>
+</view>

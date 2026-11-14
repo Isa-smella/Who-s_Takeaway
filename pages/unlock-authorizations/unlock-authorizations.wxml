@@ -1,0 +1,14 @@
+<view wx:if="{{authorized}}" class="page authorization-page">
+  <view class="notice">客服授权只是允许重新尝试。实际开锁仍由本手机连接当前柜体 BLE，并等待 STM32 与柜门状态返回结果。</view>
+  <view wx:if="{{authorizations.length === 0}}" class="empty card">当前没有可用的客服开锁授权</view>
+  <view wx:for="{{authorizations}}" wx:key="id" class="authorization-card card">
+    <view class="title-row"><text>{{item.cabinetId}} · {{item.lockerNumber}}号柜</text><text>未使用</text></view>
+    <view class="meta"><text>业务记录</text><text>{{item.recordId}}</text></view>
+    <view class="meta"><text>授权倒计时</text><text class="countdown">{{item.remainingText}}</text></view>
+    <view class="meta"><text>当前柜体</text><text class="{{item.isTargetCabinet ? 'matched' : 'mismatched'}}">{{item.isTargetCabinet ? item.cabinetId : (currentCabinetId || '尚未扫描')}}</text></view>
+    <view class="meta"><text>BLE</text><text class="{{item.bluetoothConnected ? 'matched' : 'mismatched'}}">{{item.bluetoothConnected ? '已连接目标柜体' : '未连接目标柜体'}}</text></view>
+    <button wx:if="{{!item.isTargetCabinet}}" class="scan-target" loading="{{scanningId === item.id}}" disabled="{{executingId || scanningId}}" data-id="{{item.id}}" bindtap="scanTargetCabinet">扫描 {{item.cabinetId}} 柜体二维码</button>
+    <button wx:else class="primary" loading="{{executingId === item.id}}" disabled="{{executingId || scanningId}}" data-id="{{item.id}}" bindtap="execute">重新开锁</button>
+    <button class="abandon-auth" disabled="{{executingId || scanningId}}" data-id="{{item.id}}" bindtap="abandonAuthorization">放弃此次授权</button>
+  </view>
+</view>

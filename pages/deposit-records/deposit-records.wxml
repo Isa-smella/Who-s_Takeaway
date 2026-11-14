@@ -1,0 +1,30 @@
+<view class="page records-page">
+  <text wx:if="{{cabinetId}}" class="cabinet-filter-tip">当前柜体：{{cabinetId}}</text>
+  <view class="record-filters">
+    <view class="filter-item {{statusFilter === '' ? 'active' : ''}}" data-status="" bindtap="setFilter">全部</view>
+    <view class="filter-item {{statusFilter === 'WAITING_PICKUP' ? 'active' : ''}}" data-status="WAITING_PICKUP" bindtap="setFilter">未取餐</view>
+  </view>
+  <view wx:if="{{records.length === 0}}" class="empty">
+    <text class="empty-icon">空</text>
+    <text class="empty-title">{{statusFilter === 'WAITING_PICKUP' ? '暂无未取餐记录' : '暂无存入记录'}}</text>
+    <text class="muted">{{statusFilter === 'WAITING_PICKUP' ? '当前所有外卖都已取走' : '完成一次存餐后，记录会显示在这里'}}</text>
+  </view>
+
+  <view wx:else>
+    <view wx:for="{{records}}" wx:key="id" class="record card">
+      <view class="record-head">
+        <view><text class="cabinet-name">{{item.cabinetName}}</text><text class="locker-number">{{item.lockerNumber}}号柜</text></view>
+        <text class="record-status {{item.status}}">{{item.statusText}}</text>
+      </view>
+      <view class="detail"><text>存入时间</text><text>{{item.storedTime}}</text></view>
+      <view wx:if="{{item.pickedTime}}" class="detail"><text>取出时间</text><text>{{item.pickedTime}}</text></view>
+      <view wx:if="{{item.adminClearedTime}}" class="detail"><text>管理员核空</text><text>{{item.adminClearedTime}}</text></view>
+      <view wx:if="{{item.pickupMethodText}}" class="detail"><text>取餐方式</text><text>{{item.pickupMethodText}}</text></view>
+      <view class="detail"><text>取餐码</text><text class="pickup-code">{{item.pickupCode}}</text></view>
+      <view wx:if="{{item.status === 'WAITING_PICKUP'}}" class="record-actions">
+        <button class="record-action copy-button" data-id="{{item.id}}" bindtap="copyPickupInfo">复制取餐信息</button>
+        <button wx:if="{{item.canReopen}}" class="record-action reopen-button" data-id="{{item.id}}" loading="{{reopeningRecordId === item.id}}" disabled="{{reopeningRecordId !== ''}}" bindtap="reopenDeposit">重新开柜</button>
+      </view>
+    </view>
+  </view>
+</view>

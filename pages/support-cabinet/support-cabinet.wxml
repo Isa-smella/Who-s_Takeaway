@@ -1,0 +1,36 @@
+<view wx:if="{{authorized && cabinet}}" class="page support-cabinet-page">
+  <view class="heading">
+    <view><text class="title">{{cabinetId}}</text><text class="subtitle">{{cabinet.name}} · {{cabinet.locationName}}</text></view>
+    <text class="cloud-badge">云端核验</text>
+  </view>
+  <view class="device-status card"><view><text class="device-status-title">设备状态</text><text class="device-status-time">{{bleLastSeenLabel}}</text></view><text class="ble-status {{bleConnected ? 'connected' : 'disconnected'}}">{{bleStatusText}}</text></view>
+  <view class="architecture-tip">客服只核验业务并签发一次性授权，不会远程连接柜体。门状态默认显示上次同步状态；当前设备已连接柜体时才显示现场实时状态。实际开锁由顾客手机通过 BLE 执行。</view>
+  <view wx:if="{{cabinet.status !== 'ACTIVE'}}" class="cabinet-warning">柜体状态：维修中，仅可核对记录；已转现场维修的柜格不可再次授权</view>
+
+  <view class="hint">点击显示取餐码的占用柜格进行核对</view>
+  <view class="locker-grid">
+    <view wx:for="{{lockers}}" wx:key="id" class="locker {{item.status}} {{selectedLocker && selectedLocker.id === item.id ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="selectLocker">
+      <text class="number">{{item.number}}</text><text class="status">{{item.statusText}}</text>
+      <text wx:if="{{item.pickupCode}}" class="pickup-code">取餐码 {{item.pickupCode}}</text>
+      <text class="door {{item.doorStatus}}">{{item.doorText}}</text>
+      <text wx:if="{{item.handlingStatus === 'REQUIRES_ONSITE_MAINTENANCE'}}" class="onsite">需现场维修</text>
+    </view>
+  </view>
+
+  <view wx:if="{{selectedLocker}}" class="verify-panel card">
+    <text class="panel-title">{{selectedLocker.number}}号柜取餐码核对</text>
+    <view class="official-code"><text>系统取餐码</text><text>{{selectedLocker.pickupCode}}</text></view>
+    <text class="label">顾客提供的取餐码</text>
+    <input type="number" maxlength="4" value="{{customerPickupCode}}" placeholder="请让顾客口述手机号后4位" bindinput="inputPickupCode" />
+    <button class="verify-button" disabled="{{customerPickupCode.length !== 4}}" bindtap="verifyPickupCode">核对取餐码</button>
+    <view wx:if="{{codeVerified}}" class="verified-tip">取餐码一致，可以签发一次性重新开锁授权</view>
+    <text class="label">当前顾客用户 ID</text>
+    <input value="{{customerUserId}}" disabled="{{customerUserLocked}}" placeholder="请输入顾客登录后显示的用户ID" bindinput="inputCustomerUserId" />
+    <text wx:if="{{customerUserLocked}}" class="prefill-tip">用户 ID 来自当前紧急客服请求，本次核验中不可修改。</text>
+    <text class="label">授权原因</text>
+    <textarea maxlength="200" value="{{reason}}" bindinput="inputReason"></textarea>
+    <button class="unlock-button" loading="{{issuing}}" disabled="{{!codeVerified || !customerUserId || issuing}}" bindtap="issueAuthorization">签发一次性重新开锁授权</button>
+    <view wx:if="{{issuedAuthorization}}" class="authorization-result">授权已发送给 {{issuedAuthorization.userId}}，请顾客在自己的小程序中点击“重新开锁”。</view>
+    <text class="audit-tip">授权绑定顾客、柜体、柜格和业务记录；客服不能指定无业务记录的柜格。</text>
+  </view>
+</view>

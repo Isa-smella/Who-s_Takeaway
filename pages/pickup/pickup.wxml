@@ -1,0 +1,51 @@
+<view class="page pickup-page">
+  <image class="campus-watermark" src="/assets/hnu-pickup-supercomputing-center-v1.png" mode="aspectFit" />
+  <view class="locker-badge">{{lockerNumber}}</view>
+  <text class="cabinet-context">柜体 {{cabinetId}}</text>
+
+  <block wx:if="{{phase === 'INPUT'}}">
+    <text class="title">请输入取餐码</text>
+      <text class="description">请输入存餐人员设置的手机号后4位</text>
+    <input class="code-input" type="number" maxlength="4" value="{{pickupCode}}" placeholder="4位取餐码" focus bindinput="onCodeInput" />
+    <text wx:if="{{errorMessage}}" class="inline-error">{{errorMessage}}</text>
+    <button class="primary main-button" disabled="{{pickupCode.length !== 4}}" bindtap="confirmPickup">确认取餐</button>
+  </block>
+
+  <block wx:elif="{{phase === 'CODE_ERROR'}}">
+    <text class="error-mark">!</text><text class="title error">取餐码错误</text>
+      <text class="description">请核对存餐用户发送的取餐信息</text>
+    <button class="primary main-button" bindtap="retryInput">重新输入</button>
+    <button class="secondary main-button" bindtap="contactService">联系客服</button>
+  </block>
+
+  <block wx:elif="{{phase === 'CONNECTION_ERROR'}}">
+    <text class="title error">{{errorMessage}}</text>
+    <text class="description">请靠近柜体并确认手机蓝牙已开启</text>
+    <button class="primary main-button" loading="{{submitting}}" bindtap="reconnect">重新连接</button>
+    <button class="secondary main-button" bindtap="contactService">联系客服</button>
+  </block>
+
+  <block wx:elif="{{phase === 'CONNECTING' || phase === 'OPENING'}}">
+    <text class="title">{{phase === 'CONNECTING' ? '正在连接柜体...' : '正在打开柜门...'}}</text>
+    <text class="description">请靠近柜体并稍候</text>
+  </block>
+
+  <block wx:elif="{{phase === 'OPEN_ERROR'}}">
+    <text class="title error">{{errorMessage}}</text>
+    <text class="description failure-description">{{unlockFailureHint || (requiresOnsite ? '该柜格已转维修，工作人员会尽快处理，请联系客服。' : '本次开柜未成功，您可以重试或联系客服。')}}</text>
+    <button wx:if="{{!requiresOnsite}}" class="primary main-button" bindtap="retryOpen">重试开门</button>
+    <button class="secondary main-button" bindtap="contactService">联系客服</button>
+  </block>
+
+  <block wx:elif="{{phase === 'SUCCESS'}}">
+    <text class="success-mark">✓</text><text class="title">取餐成功</text>
+    <text class="description">请取走您的外卖，并随手关闭柜门</text>
+    <view class="card result">
+      <view><text>柜体</text><text>{{cabinetId}}</text></view>
+      <view><text>柜格</text><text>{{lockerNumber}}号柜</text></view>
+      <view><text>柜门</text><text>{{doorStatus}}</text></view>
+      <view><text>取餐时间</text><text>{{pickedTime}}</text></view>
+    </view>
+    <button class="primary main-button" bindtap="finish">完成</button>
+  </block>
+</view>

@@ -1,0 +1,12 @@
+.lockers-page { position: relative; }
+.locker-hero { position: relative; min-height: 190rpx; margin: -12rpx 0 28rpx; overflow: hidden; border: 1rpx solid rgba(192,51,56,.07); border-radius: 26rpx; background: rgba(255,255,255,.64); }
+.locker-landmark { position: absolute; right: -38rpx; bottom: -10rpx; width: 470rpx; height: 265rpx; opacity: .19; pointer-events: none; }
+.heading { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-end; min-height: 190rpx; padding: 30rpx 24rpx; box-sizing: border-box; }
+.title { display: block; font-size: 42rpx; font-weight: 750; }.cabinet { font-size: 25rpx; }.legend { font-size: 21rpx; color: #82928e; }
+.legend { max-width: 260rpx; text-align: right; }
+.locker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18rpx; }
+.locker { min-height: 190rpx; border-radius: 20rpx; padding: 22rpx 18rpx; color: #fff; box-sizing: border-box; position: relative; }
+.EMPTY { background: #29916f; }.OCCUPIED { background: #de8d28; }.MAINTENANCE, .DISABLED { background: #747d7b; }
+.number { display: block; font-size: 42rpx; font-weight: 800; }.status { display: block; font-size: 26rpx; }.time { font-size: 23rpx; }
+.door { position: absolute; left: 16rpx; bottom: 14rpx; padding: 5rpx 10rpx; border-radius: 10rpx; font-size: 18rpx; background: rgba(0,0,0,.18); }
+.door.OPEN { background: #9f3042; }

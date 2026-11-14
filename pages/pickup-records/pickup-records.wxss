@@ -1,0 +1,7 @@
+.pickup-record { margin-bottom: 24rpx; padding: 30rpx; }
+.record-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 24rpx; border-bottom: 1rpx solid #f2e7e7; }
+.cabinet-name { display: block; margin-bottom: 5rpx; color: #806d6e; font-size: 22rpx; }.locker-number { font-size: 35rpx; font-weight: 800; }
+.success-status { padding: 8rpx 18rpx; border-radius: 30rpx; background: #edf3fb; color: #297ddf; font-size: 22rpx; }
+.detail { display: flex; justify-content: space-between; margin-top: 22rpx; color: #806d6e; font-size: 26rpx; }.detail text:last-child { color: #352526; }
+.pickup-code { color: #c03338 !important; font-size: 31rpx; font-weight: 750; letter-spacing: 3rpx; }
+.empty { display: flex; flex-direction: column; align-items: center; padding-top: 180rpx; text-align: center; }.empty-icon { display: flex; align-items: center; justify-content: center; width: 110rpx; height: 110rpx; border-radius: 50%; background: #fae8e9; color: #c03338; font-size: 36rpx; font-weight: 800; }.empty-title { margin: 30rpx 0 12rpx; font-size: 32rpx; font-weight: 700; }

@@ -1,0 +1,51 @@
+<view class="page detail-page" wx:if="{{authorized && cabinet}}">
+  <view class="card cabinet-overview">
+    <view class="title-row"><view><text class="cabinet-id">{{cabinet.id}}</text><text class="cabinet-name">{{cabinet.name}}</text></view><text class="cabinet-status {{cabinet.status}}">{{cabinet.statusLabel}}</text></view>
+    <view class="info"><text>位置</text><text>{{cabinet.locationName}}</text></view>
+    <view class="info"><text>BLE标识</text><text>{{cabinet.bleIdentifier}}</text></view>
+    <view class="info"><text>柜格数量</text><text>{{cabinet.lockerCount}}</text></view>
+    <view class="info"><text>设备状态</text><text>{{bleStatusText}}</text></view>
+    <view class="info"><text>通信记录</text><text>{{bleLastSeenLabel}}</text></view>
+    <view class="info"><text>设备备注</text><text>{{cabinet.notes || '无'}}</text></view>
+  </view>
+
+  <view class="card scene-card"><view class="scene-content"><text>二维码参数</text><text>scene={{cabinet.id}}</text></view><button bindtap="copyScene">复制参数</button></view>
+
+  <view wx:if="{{waitingPickupCount > 0}}" class="waiting-alert">当前有 {{waitingPickupCount}} 条未取餐记录，请优先关注取餐处理。<text bindtap="viewWaitingRecords">查看记录 ›</text></view>
+
+  <view wx:if="{{dataConsistencyIssues.length > 0}}" class="consistency-alert card">
+    <view class="consistency-title"><text>发现 {{dataConsistencyIssues.length}} 项业务数据异常</text><text>系统仅提示，不会自动修改</text></view>
+    <view wx:for="{{dataConsistencyIssues}}" wx:key="index" class="consistency-item">
+      <text>{{item.lockerNumber}}号柜</text><text>{{item.label}}</text>
+    </view>
+  </view>
+  <view wx:else class="consistency-ok">柜格业务状态与未取餐记录一致</view>
+
+  <view wx:if="{{cabinet.status === 'MAINTENANCE' && (!cabinetOrder || !cabinetOrder.selfCheckPassedAt)}}" class="cabinet-fault-alert">等待设备自检成功并上报结果，自检通过前不能恢复整柜使用。</view>
+  <view wx:if="{{cabinet.status === 'MAINTENANCE' && cabinetOrder && cabinetOrder.selfCheckPassedAt}}" class="cabinet-health-passed">设备自检已通过，等待管理员确认恢复使用。</view>
+  <button wx:if="{{cabinetOrder}}" class="work-order-entry" bindtap="viewCabinetMaintenanceOrder">查看整柜维修工单</button>
+
+  <view class="action-grid">
+    <button bindtap="viewLogs">查看操作记录</button>
+    <button wx:if="{{cabinet.status === 'ACTIVE'}}" bindtap="setMaintenance">设置整柜维修</button>
+    <button wx:if="{{cabinet.status === 'MAINTENANCE'}}" disabled="{{cabinet.faultActive || !cabinetOrder || !cabinetOrder.selfCheckPassedAt}}" class="restore" bindtap="restoreCabinet">{{cabinet.faultActive ? '整柜维修中' : !cabinetOrder || !cabinetOrder.selfCheckPassedAt ? '等待整柜自检' : '恢复整柜使用'}}</button>
+  </view>
+
+  <view class="section-head"><text>柜格状态</text><text>{{lockers.length}} 格</text></view>
+  <view class="locker-list">
+    <view wx:for="{{lockers}}" wx:key="id" class="locker-row card {{item.status}}">
+      <view class="locker-number">{{item.number}}</view>
+      <view class="locker-state"><text>{{item.statusLabel}}</text><text>{{item.doorText}}</text></view>
+      <view class="locker-actions">
+        <button wx:if="{{item.maintenanceOrder}}" class="manual-unlock" data-id="{{item.id}}" bindtap="viewLockerMaintenanceOrder">维修工单</button>
+        <text wx:if="{{item.issue && item.issue.manualUnlockCompletedAt}}">已现场开锁，待检修</text>
+        <button wx:if="{{item.status === 'EMPTY'}}" data-id="{{item.id}}" bindtap="setLockerMaintenance">设为维修</button>
+        <button wx:if="{{item.status === 'EMPTY'}}" data-id="{{item.id}}" data-status="OCCUPIED" bindtap="correctLockerStatus">校正为占用</button>
+        <button wx:if="{{cabinet.status === 'ACTIVE' && item.status === 'OCCUPIED'}}" class="inspect-empty" data-id="{{item.id}}" loading="{{processingLockerId === item.id}}" disabled="{{processingLockerId !== 0}}" bindtap="inspectOccupiedLocker">开柜核空</button>
+        <button wx:if="{{item.status === 'MAINTENANCE'}}" disabled="{{item.faultActive || !item.selfCheckPassed}}" class="restore-locker" data-id="{{item.id}}" bindtap="restoreLocker">{{item.faultActive ? '维修中' : !item.selfCheckPassed ? '等待设备自检' : '恢复使用'}}</button>
+        <text wx:if="{{item.status === 'OCCUPIED' && !item.issue}}">确认柜内为空后才能设为空闲</text>
+      </view>
+    </view>
+  </view>
+
+</view>

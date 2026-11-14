@@ -1,0 +1,14 @@
+<view class="page lockers-page">
+  <view class="locker-hero">
+    <image wx:if="{{mode === 'store'}}" class="locker-landmark" src="/assets/hnu-store-auditorium-v1.png" mode="aspectFit" />
+    <image wx:elif="{{mode === 'pickup'}}" class="locker-landmark" src="/assets/hnu-pickup-supercomputing-center-v1.png" mode="aspectFit" />
+    <view class="heading"><view><text class="title">{{mode === 'store' ? '选择空闲柜格' : mode === 'pickup' ? '选择取餐柜格' : '模拟柜体'}}</text><text class="muted cabinet">{{cabinetId}}</text></view><view class="legend"><text>{{mode === 'store' ? '门开着的空闲柜也可选择' : mode === 'pickup' ? '请选择显示“占用”的柜格' : '业务状态与门状态独立显示'}}</text></view></view>
+  </view>
+  <view class="locker-grid">
+    <view wx:for="{{lockers}}" wx:key="id" class="locker {{item.status}}" data-id="{{item.id}}" bindtap="selectLocker">
+      <text class="number">{{item.number}}</text><text class="status">{{item.statusText}}</text>
+      <text wx:if="{{item.timeText}}" class="time">{{item.timeText}}</text>
+      <text class="door {{item.doorStatus}}">门 {{item.doorStatus}}</text>
+    </view>
+  </view>
+</view>

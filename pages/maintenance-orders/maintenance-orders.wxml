@@ -1,0 +1,12 @@
+<view wx:if="{{authorized}}" class="page orders-page">
+  <view class="summary"><view><text>{{activeCount}}</text><text>待处理</text></view><view><text>{{historyCount}}</text><text>已完成</text></view></view>
+  <view class="filters"><view class="{{filter === 'ACTIVE' ? 'active' : ''}}" data-filter="ACTIVE" bindtap="setFilter">待处理</view><view class="{{filter === 'HISTORY' ? 'active' : ''}}" data-filter="HISTORY" bindtap="setFilter">已完成</view><view class="{{filter === 'ALL' ? 'active' : ''}}" data-filter="ALL" bindtap="setFilter">全部</view></view>
+  <view wx:if="{{orders.length === 0}}" class="empty card"><text>{{filter === 'ACTIVE' ? '当前没有待处理维修工单' : '当前筛选下没有维修工单'}}</text><text wx:if="{{filter === 'ACTIVE'}}">人工设置或设备异常统一归入维修中，并通过维修工单处理。</text></view>
+  <view wx:for="{{orders}}" wx:key="id" class="order-card card" data-id="{{item.id}}" bindtap="viewOrder">
+    <view class="order-head"><view><text>{{item.cabinetId}}</text><text>{{item.targetLabel}}</text></view><text class="status {{item.status}}">{{item.statusLabel}}</text></view>
+    <view class="detail"><text>维修原因</text><text>{{item.faultLabel || '待检查'}}</text></view>
+    <view class="detail"><text>创建时间</text><text>{{item.createdTime}}</text></view>
+    <view class="detail"><text>负责人</text><text>{{item.assignedTo || '尚未接单'}}</text></view>
+    <text class="view-link">查看并处理 ›</text>
+  </view>
+</view>

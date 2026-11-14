@@ -1,0 +1,32 @@
+<view wx:if="{{authorized && order}}" class="page order-detail-page">
+  <view class="card overview">
+    <view class="head"><view><text>{{order.cabinetId}}</text><text>{{order.targetLabel}}</text></view><text class="status {{order.status}}">{{order.statusLabel}}</text></view>
+    <view class="row"><text>维修原因</text><text>{{order.faultCode || order.reason}}</text></view>
+    <view class="row"><text>创建时间</text><text>{{order.createdTime}}</text></view>
+    <view class="row"><text>负责人</text><text>{{order.assignedTo || '尚未接单'}}</text></view>
+    <view class="row"><text>到场时间</text><text>{{order.arrivedTime}}</text></view>
+    <view wx:if="{{order.recordId}}" class="row"><text>业务记录</text><text class="record-id">{{order.recordId}}</text></view>
+  </view>
+
+  <button wx:if="{{order.status === 'PENDING'}}" class="primary action" bindtap="startOrder">开始处理</button>
+  <button wx:if="{{order.status === 'IN_PROGRESS'}}" class="primary action" bindtap="arriveOnsite">确认维修人员已到场</button>
+  <view wx:if="{{order.recordId && order.issueId}}" class="handover-status {{order.manualUnlockCompletedAt ? 'completed' : ''}}">{{order.manualUnlockCompletedAt ? '外卖已通过现场应急开锁交付用户：' + order.manualUnlockTime : '外卖尚未完成现场交付'}}</view>
+  <button wx:if="{{(order.status === 'ONSITE' || order.status === 'SELF_CHECK_PASSED') && order.issueId && order.recordId && !order.manualUnlockCompletedAt}}" class="emergency action" bindtap="recordManualUnlock">现场应急开锁并完成交付</button>
+
+  <view wx:if="{{order.inspectionRequired && (canInspect || order.status === 'RESOLVED')}}" class="card inspection-card">
+    <text class="section-title">现场四项检查</text>
+    <view class="inspection-row"><text>{{checkItemLabels.electronicLock}}</text><picker disabled="{{order.status === 'RESOLVED'}}" mode="selector" range="{{checkLabels}}" value="{{inspectionIndexes.electronicLock}}" data-key="electronicLock" bindchange="chooseInspection"><view>{{checkLabels[inspectionIndexes.electronicLock]}} ›</view></picker></view>
+    <view class="inspection-row"><text>{{checkItemLabels.wiring}}</text><picker disabled="{{order.status === 'RESOLVED'}}" mode="selector" range="{{checkLabels}}" value="{{inspectionIndexes.wiring}}" data-key="wiring" bindchange="chooseInspection"><view>{{checkLabels[inspectionIndexes.wiring]}} ›</view></picker></view>
+    <view class="inspection-row"><text>{{checkItemLabels.driver}}</text><picker disabled="{{order.status === 'RESOLVED'}}" mode="selector" range="{{checkLabels}}" value="{{inspectionIndexes.driver}}" data-key="driver" bindchange="chooseInspection"><view>{{checkLabels[inspectionIndexes.driver]}} ›</view></picker></view>
+    <view class="inspection-row"><text>{{checkItemLabels.power}}</text><picker disabled="{{order.status === 'RESOLVED'}}" mode="selector" range="{{checkLabels}}" value="{{inspectionIndexes.power}}" data-key="power" bindchange="chooseInspection"><view>{{checkLabels[inspectionIndexes.power]}} ›</view></picker></view>
+    <textarea wx:if="{{order.status !== 'RESOLVED'}}" maxlength="500" value="{{inspectionNotes}}" placeholder="维修与检查备注（选填）" bindinput="inputNotes"></textarea>
+    <text wx:else class="notes">{{inspectionNotes || '无维修备注'}}</text>
+    <button wx:if="{{order.status !== 'RESOLVED'}}" class="save-inspection" bindtap="saveInspection">保存检查结果</button>
+  </view>
+
+  <view wx:if="{{order.status !== 'RESOLVED'}}" class="self-check {{order.selfCheckPassedAt ? 'passed' : ''}}">{{order.selfCheckPassedAt ? '设备自检已通过：' + order.selfCheckTime : '维修人员需连接实体柜体，完成开锁、反馈和关门检查'}}</view>
+  <button wx:if="{{order.status !== 'RESOLVED' && order.type === 'LOCKER' && canInspect && !order.selfCheckPassedAt}}" class="self-check-action" loading="{{selfCheckRunning}}" disabled="{{selfCheckRunning}}" bindtap="runSelfCheck">{{selfCheckRunning ? '自检进行中，请按提示关门' : '执行设备自检'}}</button>
+  <text wx:if="{{order.status !== 'RESOLVED' && !canRestore}}" class="restore-hint">{{restoreHint}}</text>
+  <button wx:if="{{order.status !== 'RESOLVED'}}" class="restore action" disabled="{{!canRestore}}" bindtap="restoreTarget">恢复使用</button>
+  <view wx:if="{{order.status === 'RESOLVED'}}" class="resolved">工单已于 {{order.resolvedTime}} 完成</view>
+</view>

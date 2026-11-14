@@ -1,0 +1,41 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/login/login",
+    "pages/privacy-consent/privacy-consent",
+    "pages/lockers/lockers",
+    "pages/rider-store/rider-store",
+    "pages/pickup/pickup",
+    "pages/profile/profile",
+    "pages/deposit-records/deposit-records",
+    "pages/pickup-records/pickup-records",
+    "pages/customer-service/customer-service",
+    "pages/feedback/feedback",
+    "pages/my-feedback/my-feedback",
+    "pages/feedback-management/feedback-management",
+    "pages/support-cabinet/support-cabinet",
+    "pages/unlock-authorizations/unlock-authorizations",
+    "pages/management/management",
+    "pages/analytics/analytics",
+    "pages/cabinet-management/cabinet-management",
+    "pages/cabinet-form/cabinet-form",
+    "pages/cabinet-detail/cabinet-detail",
+    "pages/maintenance-orders/maintenance-orders",
+    "pages/maintenance-order-detail/maintenance-order-detail",
+    "pages/operation-logs/operation-logs",
+    "pages/announcement-management/announcement-management",
+    "pages/announcement-form/announcement-form",
+    "pages/debug/debug",
+    "pages/ble-test/ble-test"
+  ],
+  "window": {
+    "navigationBarTitleText": "湖's Takeaway",
+    "navigationBarBackgroundColor": "#C03338",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FBF6F6",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

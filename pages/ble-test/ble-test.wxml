@@ -1,0 +1,6 @@
+<view wx:if="{{authorized}}" class="page">
+  <view class="card"><view class="title">湖's Takeaway · BLE 测试</view><view class="row"><text>目标柜体：</text><text>{{targetCabinetId || '未扫码'}}</text></view><button type="primary" bindtap="scanCabinetQr">扫描柜体二维码</button><view class="row"><text>设备：</text><text>{{deviceName || '未连接'}}</text></view><view class="row"><text>状态：</text><text>{{ready ? '可通信' : (connected ? '已连接，初始化中' : '未连接')}}</text></view><button type="primary" bindtap="openAdapter" disabled="{{ready}}">{{ready ? 'HMSoft 已连接' : '扫描并连接 HMSoft'}}</button><button bindtap="disconnect" disabled="{{!connected}}">断开连接</button></view>
+  <view class="card"><view class="locker-title">01号柜</view><view class="status">状态：{{locker01}}</view><view class="buttons"><button type="primary" bindtap="open01" disabled="{{!identified}}">开启01号柜</button><button bindtap="status01" disabled="{{!identified}}">查询01</button></view></view>
+  <view class="card"><view class="locker-title">02号柜</view><view class="status">状态：{{locker02}}</view><view class="buttons"><button type="primary" bindtap="open02" disabled="{{!identified}}">开启02号柜</button><button bindtap="status02" disabled="{{!identified}}">查询02</button></view></view>
+  <view class="card"><view class="locker-title">通信日志</view><scroll-view class="log" scroll-y><text selectable>{{log}}</text></scroll-view></view>
+</view>

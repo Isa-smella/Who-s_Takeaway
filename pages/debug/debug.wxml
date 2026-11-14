@@ -1,0 +1,41 @@
+<view wx:if="{{authorized}}" class="page debug">
+  <view class="notice">当前柜体：{{cabinetId || '未绑定'}}。仅开发环境显示，柜门状态操作只修改 doorStatus。</view>
+  <view class="card section">
+    <text class="section-title">模拟扫码切换柜体</text>
+    <input class="cabinet-input" value="{{mockCabinetId}}" placeholder="输入任意 cabinetId" bindinput="onCabinetInput" />
+    <button class="primary switch-button" bindtap="switchCabinet">模拟扫描该柜体二维码</button>
+  </view>
+  <block wx:if="{{cabinetId}}">
+  <view class="card section">
+    <text class="section-title">BLE：{{bluetoothStatus}}</text>
+    <text class="group-label">连接关联柜体：{{connectedCabinetId}}</text>
+    <view class="button-grid">
+      <button data-status="CONNECTED" bindtap="setBluetooth">连接成功</button><button data-status="CONNECTING" bindtap="setBluetooth">连接中</button>
+      <button data-status="DISCONNECTED" bindtap="setBluetooth">断开</button><button data-status="ERROR" bindtap="setBluetooth">连接失败</button>
+    </view>
+  </view>
+  <view class="card section">
+    <text class="section-title">柜格调试</text>
+    <picker mode="selector" range="{{['01','02','03','04','05','06','07','08','09','10','11','12']}}" bindchange="chooseLocker"><view class="picker">当前：{{lockerId < 10 ? '0' + lockerId : lockerId}}号柜 ▾</view></picker>
+    <view wx:if="{{locker}}" class="snapshot">业务：{{locker.status}}　门：{{locker.doorStatus}}</view>
+    <text class="group-label">柜门状态（只改物理状态）</text>
+    <view class="button-grid"><button data-status="OPEN" bindtap="setDoor">门 OPEN</button><button data-status="CLOSED" bindtap="setDoor">门 CLOSED</button></view>
+    <text class="group-label">管理员业务状态</text>
+    <text wx:if="{{useCloud}}" class="notice">云端模式下不能在调试页直接伪造空闲/占用，请通过真实存取或管理维修流程改变。</text>
+    <view class="button-grid three"><button data-status="EMPTY" bindtap="setBusinessStatus">空闲</button><button data-status="OCCUPIED" bindtap="setBusinessStatus">占用</button><button data-status="MAINTENANCE" bindtap="setBusinessStatus">维修</button></view>
+    <text class="group-label">硬件故障上报</text>
+    <view class="button-grid"><button data-code="LOCK_JAMMED" bindtap="reportLockerFault">模拟门锁故障</button><button data-code="SENSOR_ERROR" bindtap="reportLockerFault">模拟柜门反馈故障</button></view>
+    <text class="group-label">下一次电子开锁结果</text>
+    <view wx:if="{{pendingUnlockFailure}}" class="snapshot">已布置：{{lockerId < 10 ? '0' + lockerId : lockerId}}号柜 · {{pendingUnlockFailure}}（仅下一次）</view>
+    <view class="button-grid"><button data-code="DOOR_NOT_OPEN" bindtap="failNextUnlock">驱动执行但门未开</button><button data-code="ESP32_NO_RESPONSE" bindtap="failNextUnlock">ESP32无响应</button></view>
+    <button class="health-button" bindtap="passHealthCheck">模拟维修后设备自检通过</button>
+    <button class="health-button" bindtap="passCabinetHealthCheck">模拟整柜控制器自检通过</button>
+  </view>
+  <view class="card section">
+    <text class="section-title">设备电量上报模拟</text>
+    <view wx:if="{{telemetry}}" class="snapshot">电量：{{telemetry.batteryPercent}}%　电压：{{telemetry.voltage}}V　状态：{{telemetry.onlineStatus}}</view>
+    <view class="button-grid"><button data-percent="86" data-online="ONLINE" bindtap="setBattery">正常 86%</button><button data-percent="20" data-online="ONLINE" bindtap="setBattery">低电量 20%</button><button data-percent="8" data-online="ONLINE" bindtap="setBattery">严重不足 8%</button><button data-percent="8" data-online="OFFLINE" bindtap="setBattery">模拟离线</button></view>
+  </view>
+  <button class="reset" bindtap="resetData">重置当前柜体 Mock 数据</button>
+  </block>
+</view>

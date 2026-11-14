@@ -1,0 +1,28 @@
+# 微信开发者工具个人配置
+project.private.config.json
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Secrets / local environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build / test output
+dist/
+build/
+coverage/

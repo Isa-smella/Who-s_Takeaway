@@ -1,0 +1,13 @@
+.feedback-list-page { padding-bottom: 150rpx; }
+.feedback-card { margin-bottom: 24rpx; padding: 30rpx; }
+.card-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 24rpx; border-bottom: 1rpx solid #f2e7e7; }
+.problem-type { font-size: 31rpx; font-weight: 750; }
+.submitted-label { color: #a08d8e; font-size: 22rpx; }
+.detail { display: flex; justify-content: space-between; margin-top: 22rpx; color: #806d6e; font-size: 25rpx; }
+.detail text:last-child { color: #352526; }
+.description { margin-top: 24rpx; padding: 22rpx; border-radius: 15rpx; background: #fffafa; color: #594849; font-size: 25rpx; line-height: 1.6; }
+.description-label { display: block; margin-bottom: 8rpx; color: #a08d8e; font-size: 22rpx; }
+.create-button { position: fixed; right: 32rpx; bottom: calc(30rpx + env(safe-area-inset-bottom)); left: 32rpx; }
+.empty { display: flex; flex-direction: column; align-items: center; padding-top: 180rpx; text-align: center; }
+.empty-icon { display: flex; align-items: center; justify-content: center; width: 110rpx; height: 110rpx; border-radius: 50%; background: #fae8e9; color: #c03338; font-size: 32rpx; font-weight: 800; }
+.empty-title { margin: 30rpx 0 12rpx; font-size: 32rpx; font-weight: 700; }

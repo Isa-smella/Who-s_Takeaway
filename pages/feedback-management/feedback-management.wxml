@@ -1,0 +1,51 @@
+<view class="page staff-feedback-page">
+  <view class="section-head"><text class="section-title">紧急客服请求</text><text>{{supportRequests.length}} 条记录</text></view>
+  <view class="support-filters"><view class="{{supportFilter === 'ACTIVE' ? 'active' : ''}}" data-filter="ACTIVE" bindtap="setSupportFilter">处理中</view><view class="{{supportFilter === 'HISTORY' ? 'active' : ''}}" data-filter="HISTORY" bindtap="setSupportFilter">历史</view><view class="{{supportFilter === 'ALL' ? 'active' : ''}}" data-filter="ALL" bindtap="setSupportFilter">全部</view></view>
+  <view wx:if="{{authorized && supportRequests.length === 0}}" class="support-empty">当前没有紧急请求</view>
+  <view wx:for="{{supportRequests}}" wx:key="id" class="support-request-card card">
+    <view class="request-head"><text>{{item.cabinetLabel}} · {{item.lockerLabel}}</text><text class="request-status {{item.status}}">{{item.statusLabel}}</text></view>
+    <view class="request-user"><text>用户</text><text>{{item.userId}}</text></view>
+    <view class="request-user"><text>发起时间</text><text>{{item.activatedTime}}</text></view>
+    <button wx:if="{{(item.status === 'OPEN' || item.status === 'VERIFYING') && (!item.cabinetId || !item.lockerId)}}" class="bind-context" data-id="{{item.id}}" bindtap="beginBindSupportContext">补录柜体和柜格</button>
+    <view wx:if="{{bindingRequestId === item.id}}" class="bind-context-form">
+      <picker mode="selector" range="{{bindingCabinetLabels}}" value="{{bindingCabinetIndex}}" bindchange="chooseBindingCabinet"><view>{{bindingCabinetIndex >= 0 ? bindingCabinetLabels[bindingCabinetIndex] : '请选择柜体'}} ›</view></picker>
+      <picker mode="selector" range="{{bindingLockerLabels}}" value="{{bindingLockerIndex}}" bindchange="chooseBindingLocker"><view>{{bindingLockerIndex >= 0 ? bindingLockerLabels[bindingLockerIndex] : '请选择柜格'}} ›</view></picker>
+      <view class="bind-actions"><button bindtap="cancelBindSupportContext">取消</button><button bindtap="confirmBindSupportContext">确认补录</button></view>
+    </view>
+    <button wx:if="{{item.status === 'OPEN' || item.status === 'VERIFYING'}}" data-id="{{item.id}}" disabled="{{!item.cabinetId}}" bindtap="handleSupportRequest">{{item.cabinetId ? '进入柜体核验' : '等待柜体信息'}}</button>
+    <button wx:if="{{item.status === 'AUTHORIZED'}}" class="revoke-auth" data-id="{{item.id}}" bindtap="revokeSupportAuthorization">撤销未使用授权</button>
+    <button wx:if="{{item.status === 'OPEN' || item.status === 'VERIFYING' || item.status === 'AUTHORIZED'}}" class="close-request" data-id="{{item.id}}" bindtap="closeSupportRequest">关闭请求</button>
+    <text wx:if="{{item.status === 'REQUIRES_ONSITE_MAINTENANCE'}}" class="onsite-tip">已停止电子开锁，请在维修工单中继续处理。</text>
+  </view>
+  <view class="section-head trace-user-head"><text class="section-title">用户操作记录</text><text>无反馈也可以查询</text></view>
+  <view class="trace-user-card card">
+    <input value="{{traceUserId}}" placeholder="输入用户 ID（可选）" bindinput="inputTraceUserId" />
+    <input value="{{traceRegistrationNumber}}" type="number" placeholder="或输入注册编号，如 00001" bindinput="inputTraceRegistrationNumber" />
+    <button bindtap="viewUserOperationTrace">查看操作记录</button>
+  </view>
+
+  <view class="section-head"><text class="section-title">选择柜体</text><text>查看柜格取餐码并处理授权</text></view>
+  <view class="cabinet-search"><input value="{{cabinetQuery}}" placeholder="搜索柜体编号、名称或位置" bindinput="inputCabinetQuery" /><text wx:if="{{cabinetQuery}}" bindtap="clearCabinetQuery">清除</text></view>
+  <view class="cabinet-list">
+    <view wx:if="{{authorized && cabinets.length && !visibleCabinets.length}}" class="cabinet-empty">没有匹配的柜体</view>
+    <view wx:for="{{visibleCabinets}}" wx:key="id" class="support-cabinet-card card">
+      <view><text class="support-cabinet-id">{{item.id}}</text><text class="support-cabinet-name">{{item.name}} · {{item.locationName}}</text></view>
+      <view class="support-cabinet-meta"><text class="cabinet-status {{item.status}}">{{item.statusLabel}}</text><text>待取 {{item.occupiedCount}} 格</text></view>
+      <button data-id="{{item.id}}" disabled="{{!item.availableForEmergency}}" bindtap="viewCabinet">{{item.availableForEmergency ? '查看柜格' : '维修中'}}</button>
+    </view>
+  </view>
+  <view class="section-head feedback-head"><text class="section-title">用户反馈</text><text>查看问题与操作轨迹</text></view>
+  <view class="summary"><view><text>{{openCount}}</text><text>待跟进</text></view><view><text>{{resolvedCount}}</text><text>已处理</text></view></view>
+  <view class="filters"><view class="filter {{filter === 'OPEN' ? 'active' : ''}}" data-filter="OPEN" bindtap="setFilter">待跟进</view><view class="filter {{filter === 'RESOLVED' ? 'active' : ''}}" data-filter="RESOLVED" bindtap="setFilter">已处理</view><view class="filter {{filter === 'ALL' ? 'active' : ''}}" data-filter="ALL" bindtap="setFilter">全部</view></view>
+
+  <view wx:if="{{authorized && visibleList.length === 0}}" class="empty">当前没有相关反馈</view>
+  <view wx:for="{{visibleList}}" wx:key="id" class="feedback-card card">
+    <view class="card-head"><view><text class="problem">{{item.problemLabel}}</text><text class="created-time">{{item.createdTime}}</text></view><text class="status {{item.status}}">{{item.statusLabel}}</text></view>
+    <view class="detail"><text>提交用户</text><text>{{item.userId}} · {{item.role}}</text></view>
+    <view class="detail"><text>柜体 / 柜格</text><text>{{item.cabinetId}} / {{item.lockerLabel}}</text></view>
+    <view class="description"><text>问题描述</text><text>{{item.descriptionText}}</text></view>
+    <button class="trace-button" data-id="{{item.id}}" bindtap="viewOperationTrace">查看用户操作轨迹</button>
+    <button wx:if="{{item.status === 'PENDING'}}" class="process-button" data-id="{{item.id}}" data-status="PROCESSING" bindtap="updateStatus">开始处理</button>
+    <button wx:if="{{item.status === 'PROCESSING'}}" class="resolve-button" data-id="{{item.id}}" data-status="RESOLVED" bindtap="updateStatus">标记已处理</button>
+  </view>
+</view>

@@ -1,0 +1,39 @@
+<view wx:if="{{authorized}}" class="page service-page">
+  <view class="header">
+    <text class="title">遇到问题？</text>
+    <text class="subtitle">柜门打不开等紧急问题请直接联系在线客服</text>
+  </view>
+
+  <view class="context-card card">
+    <text class="context-title">本次问题上下文</text>
+    <view><text>用户</text><text>{{userId}}</text></view>
+    <view><text>柜体</text><text class="{{cabinetId ? '' : 'missing-context'}}">{{cabinetId || '尚未识别'}}</text></view>
+    <view wx:if="{{lockerId}}"><text>柜格</text><text>{{lockerId}}号柜</text></view>
+    <view wx:if="{{recordId}}"><text>记录</text><text class="record-id">{{recordId}}</text></view>
+    <button wx:if="{{!lockerId && !recordId}}" class="scan-context-button" loading="{{scanningCabinet}}" disabled="{{scanningCabinet}}" bindtap="scanCabinetForService">{{cabinetId ? '重新扫码确认柜体' : '扫码识别当前柜体'}}</button>
+    <view wx:if="{{!recordId && supportRequestStatus !== 'AUTHORIZED'}}" class="manual-context-form">
+      <text class="manual-title">无法扫码时手动填写</text>
+      <input value="{{manualCabinetId}}" placeholder="柜体编号，例如 HNU-02" bindinput="inputManualCabinet" />
+      <input type="number" value="{{manualLockerId}}" placeholder="柜格编号，例如 05" bindinput="inputManualLocker" />
+      <button loading="{{savingContext}}" disabled="{{savingContext}}" bindtap="submitManualContext">保存柜体和柜格</button>
+    </view>
+    <text wx:if="{{!cabinetId}}" class="missing-tip">也可以先联系客服，在聊天中提供柜体编号、柜格号和取餐码，由客服补录。</text>
+  </view>
+
+  <button class="wechat-service-button" open-type="contact" session-from="{{serviceSession}}" show-message-card send-message-title="湖's Takeaway 紧急客服" bindtap="activateEmergencyContact">紧急开柜 · 联系客服</button>
+  <text class="service-tip">系统会附带用户、柜体、柜格和记录信息；您只需向客服提供取餐码进行核验</text>
+  <button wx:if="{{supportRequestStatus === 'OPEN' || supportRequestStatus === 'VERIFYING' || supportRequestStatus === 'AUTHORIZED'}}" class="cancel-request-button" bindtap="cancelEmergencyRequest">取消本次紧急请求</button>
+  <view wx:if="{{unlockAuthorization}}" class="authorization-ready card" bindtap="goUnlockAuthorization">
+    <view><text>客服已完成授权</text><text>{{unlockAuthorization.cabinetId}} · {{unlockAuthorization.lockerNumber}}号柜</text></view>
+    <text>立即重新开锁 ›</text>
+  </view>
+
+  <text class="section-title">常见问题</text>
+  <view class="faq card">
+    <view wx:for="{{questions}}" wx:key="title" class="faq-item" data-index="{{index}}" bindtap="toggleQuestion">
+      <view class="question"><text>{{item.title}}</text><text class="arrow {{openIndex === index ? 'open' : ''}}">›</text></view>
+      <text wx:if="{{openIndex === index}}" class="answer">{{item.answer}}</text>
+    </view>
+  </view>
+  <button class="feedback-button" bindtap="goFeedback">提交非紧急问题反馈</button>
+</view>

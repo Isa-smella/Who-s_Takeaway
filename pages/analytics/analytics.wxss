@@ -1,0 +1,16 @@
+.analytics-page { padding-bottom: 60rpx; }
+.page-head { padding: 24rpx 4rpx 30rpx; }.page-title { display: block; font-size: 42rpx; font-weight: 800; }.page-subtitle { display: block; margin-top: 8rpx; color: #806d6e; font-size: 24rpx; }
+.range-row { display: flex; gap: 12rpx; margin-bottom: 22rpx; }
+.range-button { flex: 1; margin: 0; padding: 10rpx 0; border: 1rpx solid #eadedf; border-radius: 999rpx; background: #fff; color: #806d6e; font-size: 23rpx; line-height: 1.5; }
+.range-button.selected { border-color: #c03338; background: #c03338; color: #fff; }
+.custom-range-panel { margin-bottom: 22rpx; padding: 24rpx; border-radius: 18rpx; background: #fff; }
+.custom-date-row { display: flex; gap: 20rpx; }
+.custom-date-picker { flex: 1; min-width: 0; }
+.custom-date-field { padding: 16rpx 12rpx; border: 1rpx solid #eadedf; border-radius: 12rpx; color: #453536; font-size: 24rpx; }
+.custom-date-label { display: block; margin-bottom: 12rpx; color: #806d6e; font-size: 22rpx; }
+.custom-date-error { display: block; margin-top: 16rpx; color: #c03338; font-size: 23rpx; }
+.custom-confirm { margin: 20rpx 0 0; border-radius: 12rpx; background: #c03338; color: #fff; font-size: 25rpx; }
+.custom-range-summary { margin: 0 4rpx 22rpx; color: #806d6e; font-size: 24rpx; }
+.metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16rpx; margin-bottom: 22rpx; }.metric-card { min-height: 112rpx; padding: 22rpx; border: 2rpx solid transparent; border-radius: 18rpx; background: #fff; box-shadow: 0 6rpx 20rpx rgba(110, 55, 55, .05); }.metric-card.selected { border-color: #c03338; background: #fff8f8; }.metric-label { display: block; color: #806d6e; font-size: 22rpx; }.metric-value { display: block; margin-top: 12rpx; color: #c03338; font-size: 36rpx; font-weight: 800; }
+.chart-card, .error-card { margin-bottom: 22rpx; padding: 24rpx; border-radius: 18rpx; background: #fff; }.chart-stage { position: relative; width: 642rpx; height: 360rpx; overflow: visible; }.chart-canvas { display: block; width: 642rpx; height: 360rpx; }.chart-tooltip { position: absolute; z-index: 3; display: flex; flex-direction: column; gap: 6rpx; box-sizing: border-box; width: 270rpx; min-height: 64rpx; padding: 14rpx 20rpx; border: 1rpx solid #efd1d2; border-radius: 12rpx; background: #fff; box-shadow: 0 6rpx 18rpx rgba(110, 55, 55, .14); color: #453536; font-size: 22rpx; line-height: 1.35; }.chart-tooltip text:nth-child(2) { color: #c03338; font-weight: 700; }.chart-tooltip text:nth-child(3) { color: #806d6e; font-size: 20rpx; }.tooltip-arrow { position: absolute; width: 20rpx; height: 20rpx; transform: rotate(45deg); border: 1rpx solid #efd1d2; background: #fff; }.chart-tooltip.above .tooltip-arrow { bottom: -11rpx; border-top: 0; border-left: 0; }.chart-tooltip.below .tooltip-arrow { top: -11rpx; border-right: 0; border-bottom: 0; }.empty-chart, .loading-tip, .error-card { padding: 36rpx 20rpx; color: #806d6e; text-align: center; font-size: 24rpx; }.error-card button { margin-top: 20rpx; color: #c03338; background: #fae8e9; }
+.section-title-row { display: flex; justify-content: space-between; margin-bottom: 18rpx; font-size: 29rpx; font-weight: 750; }.section-title-row text:last-child { color: #806d6e; font-size: 22rpx; font-weight: 400; }.empty-tip { padding-top: 200rpx; color: #806d6e; text-align: center; font-size: 26rpx; }

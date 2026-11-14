@@ -1,0 +1,15 @@
+page { background: #fbf6f6; color: #352526; font-family: Arial, sans-serif; }
+button { border-radius: 18rpx; }
+button::after { border: 0; }
+.page { padding: 36rpx 30rpx 60rpx; box-sizing: border-box; }
+.card { background: #fff; border-radius: 24rpx; box-shadow: 0 8rpx 26rpx rgba(192, 51, 56, .08); }
+.primary { background: #c03338; color: #fff; }
+.secondary { background: #fae8e9; color: #c03338; }
+.muted { color: #806d6e; }
+.bottom-nav { position: fixed; z-index: 10; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 12rpx 24rpx calc(14rpx + env(safe-area-inset-bottom)); background: rgba(255,255,255,.98); border-top: 1rpx solid #f1dfe0; box-shadow: 0 -8rpx 28rpx rgba(192,51,56,.07); }
+.nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5rpx; min-height: 82rpx; color: #a18f90; font-size: 22rpx; }.nav-item.active { color: #c03338; }
+.nav-icon { display: flex; align-items: center; justify-content: center; width: 42rpx; height: 42rpx; border-radius: 50%; background: #f6eeee; color: inherit; font-size: 25rpx; font-weight: 700; }.nav-item.active .nav-icon { background: #fae8e9; }
+.scan-nav-item { position: relative; display: flex; flex-direction: column; align-items: center; min-height: 82rpx; color: #806d6e; font-size: 22rpx; }
+.scan-button { display: flex; align-items: center; justify-content: center; width: 92rpx; height: 92rpx; margin-top: -45rpx; border: 10rpx solid #fff; border-radius: 50%; background: #c03338; box-shadow: 0 8rpx 24rpx rgba(192,51,56,.28); box-sizing: border-box; }
+.scan-glyph { position: relative; width: 42rpx; height: 42rpx; }.scan-corner { position: absolute; width: 12rpx; height: 12rpx; border-color: #fff; border-style: solid; }.top-left { top: 0; left: 0; border-width: 4rpx 0 0 4rpx; }.top-right { top: 0; right: 0; border-width: 4rpx 4rpx 0 0; }.bottom-left { bottom: 0; left: 0; border-width: 0 0 4rpx 4rpx; }.bottom-right { right: 0; bottom: 0; border-width: 0 4rpx 4rpx 0; }.scan-line { position: absolute; left: 7rpx; right: 7rpx; top: 19rpx; height: 3rpx; border-radius: 3rpx; background: #fff; }
+.scan-label { margin-top: 5rpx; }

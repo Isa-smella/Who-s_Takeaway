@@ -1,0 +1,9 @@
+.management-page { padding-bottom: 50rpx; }
+.page-head { padding: 24rpx 4rpx 30rpx; }
+.page-title { display: block; font-size: 42rpx; font-weight: 800; }
+.page-subtitle { display: block; margin-top: 8rpx; color: #806d6e; font-size: 24rpx; }
+.cabinet-management-entry { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22rpx; padding: 28rpx; }
+.cabinet-management-entry view text:first-child { display: block; color: #c03338; font-size: 30rpx; font-weight: 750; }
+.cabinet-management-entry view text:last-child { display: block; margin-top: 7rpx; color: #806d6e; font-size: 21rpx; }
+.arrow { color: #c03338; font-size: 40rpx; }
+.management-loading { padding-top: 200rpx; color: #806d6e; text-align: center; font-size: 26rpx; }
